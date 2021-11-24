@@ -49,7 +49,7 @@ Long number = 10L;
 ### 文档数据结构
 
 以前面的示例为例，其将被解析为如下结构的数据：
-```json
+```js
 {
   attr: {
     doc: {
@@ -244,7 +244,7 @@ Long number = 10L;
 ```
 
 其数据结构将被解析为：
-```json
+```js
 {
   doc: {
     value: None
@@ -273,7 +273,7 @@ Long number = 10L;
 ```
 
 其将被解析为：
-```json
+```js
 {
   author: {
     value: "张三 <zhangsan@example.com>"
