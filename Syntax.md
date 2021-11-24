@@ -6,8 +6,7 @@ HDML 语法说明
 
 HDML 将一个文件视为一个**文档**（`Document`）。
 
-文档由不同的**块**（`Block`）组成，在一个**块**内可嵌套其他**块**，
-在块内也可以链接其他块，也可以直接引用*块的内容*。
+文档由不同的**块**（`Block`）组成，在一个**块**内还可以嵌套其他**块**。
 
 一个**文档**在本质上即为一个块——**超级块**（`Super Block`），
 在该块内嵌入了文档**内容块**，在数据结构上构成一颗倒置的树。
@@ -16,11 +15,7 @@ HDML 将一个文件视为一个**文档**（`Document`）。
 
 ```
 @doc
-@.title
-三天速成？不存在的！
-
-    -- 评《Xxx》
-@$
+@.title 三天速成？不存在的！
 @.author
 @..name 张三
 @..email zhangsan@example.com
@@ -47,12 +42,103 @@ Long number = 10L;
 }}
 ```
 
-文档由零个或多个**属性**和**块**组成，属性用于指示文档和块的基础信息和布局控制等，
-块则是文档的内容，除了属性声明和空行，剩下的皆为文档的块。
+文档（`Document`）由零个或多个**属性**和**块**组成，
+属性用于指示文档和块的基础信息和布局控制等，块则是文档的内容，
+除了属性声明和空行，剩下的皆为文档的块。
+
+### 文档数据结构
+
+以前面的示例为例，其将被解析为如下结构的数据：
+```json
+{
+  attr: {
+    doc: {
+      value: None
+      , title: {
+        value: "三天速成？不存在的！"
+      }
+      , author: {
+        value: None
+        , name: {
+          value: "张三"
+        }
+        , email: {
+          value: "zhangsan@example.com"
+        }
+      }
+    }
+  }
+  , blocks: [{
+    attr: {
+      name: { value: "Paragraph" }
+    }
+    , text: [{
+      attr: {  } // ==> { name: "Text" }
+      , value: "文档正文。。。"
+    }]
+  }, {
+    attr: {
+      name: { value: "Section" }
+      , title: {
+        value: "第 1 节"
+      }
+    }
+    , blocks: [{
+      attr: {
+        name: { value: "Paragraph" }
+      }
+      , text: [{
+        attr: {  } // ==> { name: "Text" }
+        , value: "这是第 1 节。。。"
+      }]
+    }]
+  }, {
+    attr: {
+      name: { value: "Section" }
+      , title: {
+        value: "第 2 节"
+      }
+    }
+    , blocks: [{
+      attr: {
+        name: { value: "Paragraph" }
+      }
+      , text: [{
+        attr: {  } // ==> { name: "Text" }
+        , value: "这是第 2 节。。。"
+      }]
+    }, {
+      attr: {
+        name: { value: "Paragraph" }
+      }
+      , text: [{
+        attr: {  } // ==> { name: "Text" }
+        , value: "下面是一段 Java 代码："
+      }]
+    }, {
+      attr: {
+        name: { value: "Source" }
+        , lang: { value: "java" }
+      }
+      , blocks: [{
+        attr: {
+          name: { value: "Paragraph" }
+        }
+        , text: [{
+          attr: {  } // ==> { name: "Text" }
+          , value: "Long number = 10L;"
+        }]
+      }]
+    }]
+  }]
+}
+```
+
+**注**：这里仅引出结构，具体的解释将在[属性声明](#属性声明)和[块](#块)章节中说明。
 
 ## 属性声明
 
-文档和块的属性通过**属性标记符**（`@`）进行定义，其语法结构为：
+文档和块的属性（`Attribute`）通过**属性标记符**（`@`）进行声明，其语法结构为：
 ```
 @<attrName> <attrValue>
 ```
@@ -93,6 +179,8 @@ Long number = 10L;
 
     -- 评《Xxx》
 @$
+@.author
+@..name 张三
 ```
 
 **注**：属性值无论是单行还是多行，均按照块的方式解析，所以，在其中可以使用块。
@@ -128,8 +216,8 @@ Long number = 10L;
 @collapsed?
 ```
 
-即，`@<attrName>? true|false`形式，在属性名称后加上`?`，且值只能为`true`或`false`，
-若值为`true`，则可以省略值，仅保留属性即可，如，`@collapsed?`等价于`@collapsed? true`。
+即在属性名称后加上`?`，且其值只能为`true`或`false`，若值为`true`，
+则可以省略值，仅保留属性即可，如，`@collapsed?`等价于`@collapsed? true`。
 
 ### 属性注释
 
@@ -143,6 +231,66 @@ Long number = 10L;
 ```
 
 **注**：注释只能出现在属性上方的行，出现在其他位置的，均视为文本。
+
+### 属性数据结构
+
+以下声明的属性：
+```
+@doc
+@.title 三天速成？不存在的！
+@.author
+@..name 张三
+@..email zhangsan@example.com
+```
+
+其数据结构将被解析为：
+```json
+{
+  doc: {
+    value: None
+    , title: {
+      value: "三天速成？不存在的！"
+    }
+    , author: {
+      value: None
+      , name: {
+        value: "张三"
+      }
+      , email: {
+        value: "zhangsan@example.com"
+      }
+    }
+  }
+}
+```
+
+也即，每一级属性都是一个至少包含`value`属性的对象，无论该属性是否有值，
+其都默认存在。因此，可以声明如下形式的属性：
+```
+@author 张三 <zhangsan@example.com>
+@.name 张三
+@.email zhangsan@example.com
+```
+
+其将被解析为：
+```json
+{
+  author: {
+    value: "张三 <zhangsan@example.com>"
+    , name: {
+      value: "张三"
+    }
+    , email: {
+      value: "zhangsan@example.com"
+    }
+  }
+}
+```
+
+其等价于：
+```
+@author {{@@author.name}} <{{@@author.email}}>
+```
 
 ## 块
 
