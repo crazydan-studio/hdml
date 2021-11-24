@@ -54,79 +54,69 @@ Long number = 10L;
   attr: {
     doc: {
       value: None
-      , title: {
-        value: "三天速成？不存在的！"
-      }
+      , title: { value: "三天速成？不存在的！" }
       , author: {
         value: None
-        , name: {
-          value: "张三"
-        }
-        , email: {
-          value: "zhangsan@example.com"
-        }
+        , name: { value: "张三" }
+        , email: { value: "zhangsan@example.com" }
       }
     }
   }
   , blocks: [{
-    attr: {
-      name: { value: "Paragraph" }
-    }
-    , text: [{
-      attr: {  } // ==> { name: "Text" }
-      , value: "文档正文。。。"
+    name: "Paragraph"
+    , attr: {  }
+    , blocks: [{
+      name: "Text"
+      , attr: {  }
+      , content: "文档正文。。。"
     }]
   }, {
-    attr: {
-      name: { value: "Section" }
-      , title: {
-        value: "第 1 节"
-      }
+    name: "Section"
+    , attr: {
+      title: { value: "第 1 节" }
     }
     , blocks: [{
-      attr: {
-        name: { value: "Paragraph" }
-      }
-      , text: [{
-        attr: {  } // ==> { name: "Text" }
-        , value: "这是第 1 节。。。"
+      name: "Paragraph"
+      , attr: {  }
+      , blocks: [{
+        name: "Text"
+        , attr: {  }
+        , content: "这是第 1 节。。。"
       }]
     }]
   }, {
-    attr: {
-      name: { value: "Section" }
-      , title: {
-        value: "第 2 节"
-      }
+    name: "Section"
+    , attr: {
+      title: { value: "第 2 节" }
     }
     , blocks: [{
-      attr: {
-        name: { value: "Paragraph" }
-      }
-      , text: [{
-        attr: {  } // ==> { name: "Text" }
-        , value: "这是第 2 节。。。"
+      name: "Paragraph"
+      , attr: {  }
+      , blocks: [{
+        name: "Text"
+        , attr: {  }
+        , content: "这是第 2 节。。。"
       }]
     }, {
-      attr: {
-        name: { value: "Paragraph" }
-      }
-      , text: [{
-        attr: {  } // ==> { name: "Text" }
-        , value: "下面是一段 Java 代码："
+      name: "Paragraph"
+      , attr: {  }
+      , blocks: [{
+        name: "Text"
+        , attr: {  }
+        , content: "下面是一段 Java 代码："
       }]
     }, {
-      attr: {
-        name: { value: "Source" }
-        , lang: { value: "java" }
+      name: "Source"
+      , attr: {
+        lang: { value: "java" }
       }
       , blocks: [{
-        attr: {
-          name: { value: "Paragraph" }
-        }
-        , text: [{
-          attr: {  } // ==> { name: "Text" }
-          , value: "Long number = 10L;"
+        name: "Paragraph"
+        , attr: {  }
+        , blocks: [{
+          name: "Text"
+          , attr: {  }
+          , content: "Long number = 10L;"
         }]
       }]
     }]
@@ -134,7 +124,9 @@ Long number = 10L;
 }
 ```
 
-**注**：这里仅引出结构，具体的解释将在[属性声明](#属性声明)和[块](#块)章节中说明。
+**注**：
+- 这里仅引出结构，具体的解释将在[属性声明](#属性声明)和[块](#块)章节中说明；
+- 从数据结构上来看，除了`Text`块以外，其他类型的块均能够嵌套其他块；
 
 ## 属性声明
 
@@ -248,17 +240,11 @@ Long number = 10L;
 {
   doc: {
     value: None
-    , title: {
-      value: "三天速成？不存在的！"
-    }
+    , title: { value: "三天速成？不存在的！" }
     , author: {
       value: None
-      , name: {
-        value: "张三"
-      }
-      , email: {
-        value: "zhangsan@example.com"
-      }
+      , name: {  value: "张三" }
+      , email: { value: "zhangsan@example.com" }
     }
   }
 }
@@ -277,12 +263,8 @@ Long number = 10L;
 {
   author: {
     value: "张三 <zhangsan@example.com>"
-    , name: {
-      value: "张三"
-    }
-    , email: {
-      value: "zhangsan@example.com"
-    }
+    , name: { value: "张三" }
+    , email: { value: "zhangsan@example.com" }
   }
 }
 ```
