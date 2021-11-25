@@ -353,7 +353,7 @@ Long number = 10L;
 文本为**段落**的组成单元，其除了文字以外，
 仅具备与布局相关的[样式属性](#文本样式)：
 ```
-这段文字有**加粗**`红`{@style.color red}字。
+这段文字有**加粗**`红`{@style.font.color red}字。
 ```
 
 以上示例的数据结构为：
@@ -382,7 +382,10 @@ Long number = 10L;
     , attr: {
       style: {
         value: None
-        , color: { value: "red" }
+        , font: {
+          value: None
+          , color: { value: "red" }
+        }
       }
     }
     , content: "红"
@@ -620,8 +623,8 @@ This is a English paragraph.
       name: "Section"
       , attr: {
         lang: { value: "zh" }
-        , title: { value: "English" }
-        , author: { value: "中文" }
+        , title: { value: "中文" }
+        , author: { value: "李四" }
       }
       , blocks: [
         {
@@ -696,7 +699,7 @@ int a = 0;
 
 - 指定样式属性
 ```
-**粗体**{@style.color red, @style.font.size 24px}
+**粗体**{@style.font.color red, @style.font.size 24px}
 ```
 
 - 无样式
@@ -707,8 +710,9 @@ int a = 0;
 - 引用样式
 ```
 @bigRedFont
-@.color red
-@.font.size 24px
+@.font
+@..color red
+@..size 24px
 
 **大红字体**{@style @@bigRedFont}
 ```
