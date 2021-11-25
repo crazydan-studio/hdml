@@ -671,15 +671,19 @@ int a = 0;
   , attr: {
     lang: { value: "java" }
   }
-  , blocks: [{
-    name: "Paragraph"
-    , attr: {  }
-    , blocks: [{
-      name: "Text"
+  , blocks: [
+    {
+      name: "Paragraph"
       , attr: {  }
-      , content: "int a = 0;"
-    }]
-  }]
+      , blocks: [
+        {
+          name: "Text"
+          , attr: {  }
+          , content: "int a = 0;"
+        }
+      ]
+    }
+  ]
 }
 ```
 
