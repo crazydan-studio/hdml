@@ -11,14 +11,19 @@ HDML 将一个文件视为一个**文档**（`Document`）。
 一个**文档**在本质上即为一个块——**超级块**（`Super Block`），
 在该块内嵌入了文档**内容块**，在数据结构上构成一颗倒置的树。
 
+注意，`HDML` 描述的仅仅是文档的数据结构，并不包含数据的处理逻辑，
+因此，在文档中不应该出现逻辑代码，也不会有动态的数据。
+文档处理器应该根据文档提供的数据做相应的处理，其处理过程不是由文档定义的。
+
+逻辑的处理核心是数据，所以，定义好数据，便能够满足任意的需求。
+
 ## 文档
 
 ```
-@doc
-@.title 三天速成？不存在的！
-@.author
-@..name 张三
-@..email zhangsan@example.com
+@title 三天速成？不存在的！
+@author
+@.name 张三
+@.email zhangsan@example.com
 
 文档正文。。。
 
@@ -52,14 +57,11 @@ Long number = 10L;
 ```js
 {
   attr: {
-    doc: {
+    title: { value: "三天速成？不存在的！" }
+    , author: {
       value: None
-      , title: { value: "三天速成？不存在的！" }
-      , author: {
-        value: None
-        , name: { value: "张三" }
-        , email: { value: "zhangsan@example.com" }
-      }
+      , name: { value: "张三" }
+      , email: { value: "zhangsan@example.com" }
     }
   }
   , blocks: [{
@@ -149,12 +151,16 @@ Long number = 10L;
 属性名称前面`.`的数量代表着属性的层级级数，在定义三级及以上属性时，
 则会出现两个以上的`.`：
 ```
-@doc
-@.title 三天速成？不存在的！
-@.author
-@..name 张三
-@..email zhangsan@example.com
+@title 三天速成？不存在的！
+@author
+@.name 张三
+@.email
+@..user zhangsan
+@..host example.com
 ```
+
+**注**：`email.user`和`email.host`只是用于举例，
+实际应该写为`@.email zhangsan@example.com`。
 
 父子级属性需紧邻在一起，之间不能有空白行，也不能有属于其他属性的子级属性。
 
@@ -165,14 +171,13 @@ Long number = 10L;
 
 属性值可以包含多行，但需以`@$`标识值的结束：
 ```
-@doc
-@.title
+@title
 三天速成？不存在的！
 
     -- 评《Xxx》
 @$
-@.author
-@..name 张三
+@author
+@.name 张三
 ```
 
 **注**：属性值无论是单行还是多行，均按照块的方式解析，所以，在其中可以使用块。
@@ -181,8 +186,9 @@ Long number = 10L;
 
 在属性内可以引用其前序属性或上级属性的值，其引用方式为：
 ```
-@author 张三 <zhangsan@example.com>
-@doc.author @@author
+@doc_author 张三 <zhangsan@example.com>
+
+@author @@doc_author
 ```
 
 也即，以`@@<prevAttrName>`形式引用属性值，且可引用的范围是所处的块内可见的属性。
@@ -216,10 +222,13 @@ Long number = 10L;
 在**属性标记符**上方可以添加单行或多行注释，单行注释以`// `开头，
 多行注释则包含在`/** ... */`内：
 ```
-// Note: doc 是文档属性
-@doc
+// 定义文档属性
+/** 这是文档作者 */
+@author 张三
 /** 这是文档标题 */
-@.title 世界需要多样的色彩
+@title 世界需要多样的色彩
+
+开始正文。。。
 ```
 
 **注**：注释只能出现在属性上方的行，出现在其他位置的，均视为文本。
@@ -228,24 +237,20 @@ Long number = 10L;
 
 以下声明的属性：
 ```
-@doc
-@.title 三天速成？不存在的！
-@.author
-@..name 张三
-@..email zhangsan@example.com
+@title 三天速成？不存在的！
+@author
+@.name 张三
+@.email zhangsan@example.com
 ```
 
 其数据结构将被解析为：
 ```js
 {
-  doc: {
+  title: { value: "三天速成？不存在的！" }
+  , author: {
     value: None
-    , title: { value: "三天速成？不存在的！" }
-    , author: {
-      value: None
-      , name: {  value: "张三" }
-      , email: { value: "zhangsan@example.com" }
-    }
+    , name: {  value: "张三" }
+    , email: { value: "zhangsan@example.com" }
   }
 }
 ```
@@ -269,10 +274,7 @@ Long number = 10L;
 }
 ```
 
-其等价于：
-```
-@author {{@@author.name}} <{{@@author.email}}>
-```
+也就是，在任意属性下，均可添加子级属性，并且可以为父级属性设置独立的值。
 
 ## 块
 
