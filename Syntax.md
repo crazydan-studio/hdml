@@ -64,65 +64,87 @@ Long number = 10L;
       , email: { value: "zhangsan@example.com" }
     }
   }
-  , blocks: [{
-    name: "Paragraph"
-    , attr: {  }
-    , blocks: [{
-      name: "Text"
-      , attr: {  }
-      , content: "文档正文。。。"
-    }]
-  }, {
-    name: "Section"
-    , attr: {
-      title: { value: "第 1 节" }
-    }
-    , blocks: [{
+  , blocks: [
+    {
       name: "Paragraph"
       , attr: {  }
-      , blocks: [{
-        name: "Text"
-        , attr: {  }
-        , content: "这是第 1 节。。。"
-      }]
-    }]
-  }, {
-    name: "Section"
-    , attr: {
-      title: { value: "第 2 节" }
-    }
-    , blocks: [{
-      name: "Paragraph"
-      , attr: {  }
-      , blocks: [{
-        name: "Text"
-        , attr: {  }
-        , content: "这是第 2 节。。。"
-      }]
-    }, {
-      name: "Paragraph"
-      , attr: {  }
-      , blocks: [{
-        name: "Text"
-        , attr: {  }
-        , content: "下面是一段 Java 代码："
-      }]
-    }, {
-      name: "Source"
-      , attr: {
-        lang: { value: "java" }
-      }
-      , blocks: [{
-        name: "Paragraph"
-        , attr: {  }
-        , blocks: [{
+      , blocks: [
+        {
           name: "Text"
           , attr: {  }
-          , content: "Long number = 10L;"
-        }]
-      }]
-    }]
-  }]
+          , content: "文档正文。。。"
+        }
+      ]
+    }
+    , {
+      name: "Section"
+      , attr: {
+        title: { value: "第 1 节" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "这是第 1 节。。。"
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      name: "Section"
+      , attr: {
+        title: { value: "第 2 节" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "这是第 2 节。。。"
+            }
+          ]
+        }
+        , {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "下面是一段 Java 代码："
+            }
+          ]
+        }
+        , {
+          name: "Source"
+          , attr: {
+            lang: { value: "java" }
+          }
+          , blocks: [
+            {
+              name: "Paragraph"
+              , attr: {  }
+              , blocks: [
+                {
+                  name: "Text"
+                  , attr: {  }
+                  , content: "Long number = 10L;"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
@@ -336,36 +358,41 @@ Long number = 10L;
 
 以上示例的数据结构为：
 ```js
-[{
-  name: "Text"
-  , attr: {  }
-  , content: "这段文字有"
-}, {
-  name: "Text"
-  , attr: {
-    style: {
-      value: None
-      , font: {
+[
+  {
+    name: "Text"
+    , attr: {  }
+    , content: "这段文字有"
+  }
+  , {
+    name: "Text"
+    , attr: {
+      style: {
         value: None
-        , bold: { value: true }
+        , font: {
+          value: None
+          , bold: { value: true }
+        }
       }
     }
+    , content: "加粗"
   }
-  , content: "加粗"
-}, {
-  name: "Text"
-  , attr: {
-    style: {
-      value: None
-      , color: { value: "red" }
+  , {
+    name: "Text"
+    , attr: {
+      style: {
+        value: None
+        , color: { value: "red" }
+      }
     }
+    , content: "红"
   }
-  , content: "红"
-}, {
-  name: "Text"
-  , attr: {  }
-  , content: "字。"
-}]
+  , {
+    name: "Text"
+    , attr: {  }
+    , content: "字。"
+  }
+]
 ```
 
 ### 段落
@@ -412,11 +439,13 @@ Long number = 10L;
   , attr: {
     indent: { value: 4 }
   }
-  , blocks: [{
-    name: "Text"
-    , attr: {  }
-    , content: "这段文本将缩进4个字符。"
-  }]
+  , blocks: [
+    {
+      name: "Text"
+      , attr: {  }
+      , content: "这段文本将缩进4个字符。"
+    }
+  ]
 }
 ```
 
@@ -454,63 +483,84 @@ Long number = 10L;
 
 以上示例的数据结构为：
 ```js
-[{
-  name: "Section"
-  , attr: {
-    title: { value: "第 1 节" }
-  }
-  , blocks: [{
-    name: "Paragraph"
-    , attr: {  }
-    , blocks: [{
-      name: "Text"
-      , attr: {  }
-      , content: "这是第 1 节。。。"
-    }]
-  }, {
+[
+  {
     name: "Section"
     , attr: {
-      title: { value: "第 1.1 节" }
+      title: { value: "第 1 节" }
     }
-    , blocks: [{
-      name: "Paragraph"
-      , attr: {  }
-      , blocks: [{
-        name: "Text"
-        , attr: {  }
-        , content: "这是第 1.1 节。。。"
-      }]
-    }, {
-      name: "Section"
-      , attr: {
-        title: { value: "第 1.1.1 节" }
-      }
-      , blocks: [{
+    , blocks: [
+      {
         name: "Paragraph"
         , attr: {  }
-        , blocks: [{
-          name: "Text"
-          , attr: {  }
-          , content: "这是第 1.1.1 节。。。"
-        }]
-      }]
-    }]
-  }]
-}, {
-  name: "Section"
-  , attr: {
-    title: { value: "第 2 节" }
+        , blocks: [
+          {
+            name: "Text"
+            , attr: {  }
+            , content: "这是第 1 节。。。"
+          }
+        ]
+      }
+      , {
+        name: "Section"
+        , attr: {
+          title: { value: "第 1.1 节" }
+        }
+        , blocks: [
+          {
+            name: "Paragraph"
+            , attr: {  }
+            , blocks: [
+              {
+                name: "Text"
+                , attr: {  }
+                , content: "这是第 1.1 节。。。"
+              }
+            ]
+          }
+          , {
+            name: "Section"
+            , attr: {
+              title: { value: "第 1.1.1 节" }
+            }
+            , blocks: [
+              {
+                name: "Paragraph"
+                , attr: {  }
+                , blocks: [
+                  {
+                    name: "Text"
+                    , attr: {  }
+                    , content: "这是第 1.1.1 节。。。"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
-  , blocks: [{
-    name: "Paragraph"
-    , attr: {  }
-    , blocks: [{
-      name: "Text"
-      , attr: {  }
-      , content: "这是第 2 节。。。"
-    }]
-  }]
-}]
+  , {
+    name: "Section"
+    , attr: {
+      title: { value: "第 2 节" }
+    }
+    , blocks: [
+      {
+        name: "Paragraph"
+        , attr: {  }
+        , blocks: [
+          {
+            name: "Text"
+            , attr: {  }
+            , content: "这是第 2 节。。。"
+          }
+        ]
+      }
+    ]
+  }
+]
 ```
 
 ### 块嵌套
@@ -544,23 +594,50 @@ This is a English paragraph.
   , attr: {
     layout: { value: "row" }
   }
-  , blocks: [{
-    name: "Section"
-    , attr: {
-      lang: { value: "en" }
-      , title: { value: "English" }
-      , author: { value: "张三" }
+  , blocks: [
+    {
+      name: "Section"
+      , attr: {
+        lang: { value: "en" }
+        , title: { value: "English" }
+        , author: { value: "张三" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "This is a English paragraph."
+            }
+          ]
+        }
+      ]
     }
-    , blocks: [{
-      name: "Paragraph"
-      , attr: {  }
-      , blocks: [{
-        name: "Text"
-        , attr: {  }
-        , content: "This is a English paragraph."
-      }]
-    }]
-  }]
+    , {
+      name: "Section"
+      , attr: {
+        lang: { value: "zh" }
+        , title: { value: "English" }
+        , author: { value: "中文" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "这是一段英文。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
