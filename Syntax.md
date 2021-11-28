@@ -189,6 +189,18 @@ Long number = 10L;
 文档属性放置在文件的开始位置，也即，放在所有块的最前面，
 而块的属性则紧挨着**块起始符**，置于块起始符的后面的行。
 
+属性值默认按照普通文本处理，不做语法解析，若需要按`HDML`语法解析，
+则需要为属性指定子属性`.markupped?`（语法说明见[布尔类型属性](#布尔类型属性)），
+也即声明其值为标记语言，需要按标记语法进行解析：
+```
+@title
+**三天**速成？不存在的！
+
+    -- 评[《Xxx》](https://three-days-done.example.com)
+@$
+@.markupped?
+```
+
 ### 多行属性值
 
 属性值可以包含多行，但需以`@$`标识值的结束：
@@ -201,8 +213,6 @@ Long number = 10L;
 @author
 @.name 张三
 ```
-
-**注**：属性值无论是单行还是多行，均按照块的方式解析，所以，在其中可以使用块。
 
 ### 属性值引用
 
@@ -335,9 +345,10 @@ Long number = 10L;
 @.format 第N章
 
 @link ./a.hdoc
-@.title Xxxx
+@.title 缘由
+
 @link ./b.hdoc
-@.title Xxxx
+@.title 发展
 
 }}
 ```
@@ -345,6 +356,59 @@ Long number = 10L;
 块内容可以为文本，可以为属性集合，也可以为其他块。
 实际可处理的内容由**块处理器**决定，
 **文档解析器**只是将解析得到的数据结构交给**块处理**去处理。
+
+以上示例的数据结构为：
+```js
+{
+  name: "Toc"
+  , attr: {
+    title: {
+      value: None
+      , numbered: { value: true }
+      , format: { value: "第N章" }
+    }
+  }
+  , blocks: [
+    {
+      name: "Paragraph"
+      , attr: {
+        link: {
+          value: "./a.hdoc"
+          , title: { value: "缘由" }
+        }
+      }
+      , blocks: [  ]
+    }
+    , {
+      name: "Paragraph"
+      , attr: {
+        link: {
+          value: "./b.hdoc"
+          , title: { value: "发展" }
+        }
+      }
+      , blocks: [  ]
+    }
+  ]
+}
+```
+
+### 块标识
+
+每个块均有一个唯一标识，在未指定时，由**文档处理器**根据确定的规则自动生成。
+块的标识将用于为块生成链接锚点，以便于快速定位块的位置。
+
+通过属性`@id`可以手动指定块的标识：
+```
+@id para-1
+这是第一段。。。
+
+===
+@id section-1
+@title 章节一
+
+。。。
+```
 
 ### 文本
 
@@ -375,6 +439,7 @@ Long number = 10L;
         }
       }
     }
+    , enclosure: "**"
     , content: "加粗"
   }
   , {
@@ -397,6 +462,9 @@ Long number = 10L;
   }
 ]
 ```
+
+**注**：`enclosure`表示文字块被什么符号包围（默认为反引号），
+用于反向生成`HDML`。
 
 ### 段落
 
@@ -690,6 +758,55 @@ int a = 0;
 }
 ```
 
+### 图片
+
+```
+![Little Cat](https://example.com/image/cat.jpg)
+```
+
+等价于
+
+```
+{{List|
+
+
+
+}}
+```
+
+### 列表
+
+```
+@collapsable?
+@numbered?
+- 列表项1
+  @collapsed?
+  @numbered? false
+  - 列表项1.1
+  - 列表项1.2
+- 列表项2
+```
+
+等价于
+
+```
+{{List|
+
+
+
+}}
+```
+
+### 表格
+
+```
+{{Table|
+
+
+
+}}
+```
+
 ## 文本样式
 
 - 加粗
@@ -733,3 +850,8 @@ int a = 0;
 ```
 @import a/b/c.hdoc
 ```
+
+## 参考
+
+- [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest/)
+- [Markdown](https://www.markdownguide.org/getting-started/)
