@@ -520,6 +520,9 @@ Long number = 10L;
 }
 ```
 
+**注**：段落可以换行书写，只要行间没有空白行（不包含块内的空白，块均视为一个整体）即可，
+相邻的行均会被视为同一段落。
+
 ### 章节
 
 **章节**（`Section`）以至少三个`=`连写作为分隔符，
@@ -717,6 +720,7 @@ This is a English paragraph.
 代码块采用如下形式书写：
 <pre>
 ```
+@title This is a Java example
 @lang java
 
 int a = 0;
@@ -726,6 +730,7 @@ int a = 0;
 其等价于：
 ```
 {{Source|
+@title This is a Java example
 @lang java
 
 int a = 0;
@@ -741,6 +746,7 @@ int a = 0;
   name: "Source"
   , attr: {
     lang: { value: "java" }
+    , title: { value: "This is a Java example" }
   }
   , blocks: [
     {
@@ -761,15 +767,24 @@ int a = 0;
 ### 图片
 
 ```
+@title
+@.position top
+@.align center
+@align center
 ![Little Cat](https://example.com/image/cat.jpg)
 ```
 
 等价于
 
 ```
-{{List|
+{{Image|
+@title
+@.position top
+@.align center
+@align center
+@url https://example.com/image/cat.jpg
 
-
+Little Cat
 
 }}
 ```
@@ -777,35 +792,56 @@ int a = 0;
 ### 列表
 
 ```
-@collapsable?
-@numbered?
-- 列表项1
-  @collapsed?
-  @numbered? false
-  - 列表项1.1
-  - 列表项1.2
-- 列表项2
-```
-
-等价于
-
-```
 {{List|
+@collapsable?
 
+@collapsed?
+@numbered?
+. 列表项1
+.. 列表项1.1
+... 列表项1.1.1
+... 列表项1.1.2
+.. 列表项1.2
+... 列表项1.2.1
 
+. 列表项2
+.. 列表项2.1
+.. 列表项2.2
 
 }}
 ```
+
+注，每一个列表项同样也为一个块。
 
 ### 表格
 
 ```
 {{Table|
 
+================
+@align center
 
+----------------
+@align left
+
+Column 1
+
+----------------
+
+Column 2
+
+----------------
+
+Column 3
+
+----------------
 
 }}
 ```
+
+### 块引入
+
+// TODO 链接跳转、块内容引入
 
 ## 文本样式
 
