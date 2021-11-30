@@ -216,7 +216,7 @@ Long number = 10L;
 
 ### 属性值引用
 
-在属性内可以引用其前序属性或上级属性的值，其引用方式为：
+属性可以引用在其之间定义的属性或其上级属性的值，其引用方式为：
 ```
 @doc_author 张三 <zhangsan@example.com>
 
@@ -227,11 +227,11 @@ Long number = 10L;
 
 以这种方式可以在文档开始处定义全局常量，在块内便可以复用这些常量，从而减少重复定义。
 
-在文本内（包括属性值）则以`{{@@<attrName>}}`方式引用：
+在文本内，包括属性值为文本的情况，则以`{@@<attrName>}`方式进行值引用：
 ```
 @author 张三 <zhangsan@example.com>
 
-本文作者为 {{@@author}}。
+本文作者为 {@@author}。
 ```
 
 **注**：同等级之间的块的属性不能相互引用。
@@ -415,7 +415,7 @@ Long number = 10L;
 文本是最小的块单元，不可再被细分。文本才是文档的「骨与肉」。
 
 文本为**段落**的组成单元，其除了文字以外，
-仅具备与布局相关的[样式属性](#文本样式)：
+仅具备与布局相关的[样式属性](#内联块)：
 ```
 这段文字有**加粗**`红`{@style.font.color red}字。
 ```
@@ -818,41 +818,84 @@ Little Cat
 ```
 {{Table|
 
-================
-@align center
+===
+@head?
+====
+Head 1
+====
+Head 2
+====
+Head 3
 
-----------------
+===
+@align center
+====
 @align left
 
 Column 1
-
-----------------
-
+====
 Column 2
-
-----------------
-
+====
 Column 3
 
-----------------
+===
+====
+Column 1
+====
+Column 2
+====
+Column 3
 
 }}
 ```
+
+**注**：如何统一块内层级与章节层级的标记符号？
 
 ### 块引入
 
 // TODO 链接跳转、块内容引入
 
-## 文本样式
+## 内联块
+
+注：在行内的块均为**内联块**（`Inline Block`）并且在同一行展示。
+
+内联块属性定义的一般形式为：
+```
+{@<attr1> val1, @<attr2> val2, ...}
+```
+
+但可以引用其他属性：
+```
+{@<attr1> @@<prevAttr1>, @<attr2> val2, ...}
+```
+
+还可以做属性引用合并：
+```
+{@@<prevAttr1>, @<attr2> val2, ...}
+```
+
+以上为将`@@<prevAttr1>`的子级属性与后序的属性列表合并成为一个内联块属性。
 
 - 加粗
 ```
 **粗体**
 ```
 
+等价于
+
+```
+`粗体`{@style.font.bold?}
+```
+
 - 指定样式属性
 ```
 **粗体**{@style.font.color red, @style.font.size 24px}
+```
+
+等价于
+
+```
+`粗体`{@style.font.bold?, @style.font.color red, @style.font.size 24px}
 ```
 
 - 无样式
@@ -869,6 +912,20 @@ Column 3
 
 **大红字体**{@style @@bigRedFont}
 ```
+
+以上也可以按如下方式定义样式：
+
+```
+@bigRedFontStyle
+@.style
+@..font
+@...color red
+@...size 24px
+
+**大红字体**{@@bigRedFontStyle, @style.font.background.color yellow}
+```
+
+即，`@style.font.background.color`将与`@bigRedFontStyle.style`做合并。
 
 ## 常用属性
 
