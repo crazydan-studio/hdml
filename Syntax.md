@@ -795,17 +795,26 @@ Little Cat
 {{List|
 @collapsable?
 
-@collapsed?
 @numbered?
 . 列表项1
+
+@collapsed?
 .. 列表项1.1
+
 ... 列表项1.1.1
+
 ... 列表项1.1.2
+
 .. 列表项1.2
+
 ... 列表项1.2.1
 
 . 列表项2
+
 .. 列表项2.1
+
+![Little Cat](https://example.com/image/cat.jpg)
+
 .. 列表项2.2
 
 }}
@@ -818,38 +827,48 @@ Little Cat
 ```
 {{Table|
 
-===
+****************
 @head?
-====
+
+..........
 Head 1
-====
+
+..........
 Head 2
-====
+
+..........
 Head 3
 
-===
+
+****************
+@row?
 @align center
-====
+
+..........
 @align left
 
 Column 1
-====
+
+..........
 Column 2
-====
+
+..........
 Column 3
 
-===
-====
+
+****************
+@row?
+
+..........
+@span 2
+
 Column 1
-====
-Column 2
-====
+
+..........
 Column 3
 
 }}
 ```
-
-**注**：如何统一块内层级与章节层级的标记符号？
 
 ### 块引入
 
@@ -939,7 +958,7 @@ Column 3
 
 ### @import
 
-引入其他文档内容：
+引入其他文档的数据结构：
 ```
 @import a/b/c.hdoc
 ```
