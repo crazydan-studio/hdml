@@ -422,7 +422,7 @@ Long number = 10L;
 文本为**段落**的组成单元，其除了文字以外，
 仅具备与布局相关的[样式属性](#内联块)：
 ```
-这段文字有**加粗**`红`{@style.font.color red}字。
+这段文字有**加粗**`红`{@font.color red}字。
 ```
 
 以上示例的数据结构为：
@@ -527,6 +527,19 @@ Long number = 10L;
 
 **注**：段落可以换行书写，只要行间没有空白行（不包含块内的空白，块均视为一个整体）即可，
 相邻的行均会被视为同一段落。
+
+可通过属性`@hardBreaks?`设置为多行模式：
+```
+@hardBreaks?
+这是第一行，
+这里换行了。
+```
+
+通过`@align`设置对其方式：
+```
+@align center
+该段文字居中显示。
+```
 
 ### 章节
 
@@ -787,6 +800,10 @@ Little Cat
 ```
 {{List|
 @collapsable?
+// 前缀符: https://docs.asciidoctor.org/asciidoc/latest/lists/ordered/
+// - 无序列表: square|circle|disc|none
+// - 有序列表: arabic|decimal|loweralpha|upperalpha|lowerroman|upperroman|lowergreek
+@marker square
 
 @numbered?
 . 列表项1
@@ -815,7 +832,14 @@ Little Cat
 
 每一个列表项同样也为一个块，其前缀符`.`的数量代表着列表项的层级。
 
+在列表项下的块均为列表内容，在展示上会与列表项的缩进对齐。
+
 列表项的属性作用于自身及其子列表。
+
+// TODO 代办列表: https://docs.asciidoctor.org/asciidoc/latest/lists/checklist/
+//      - 使用 [ ] 和 [x]
+// TODO 描述列表: https://docs.asciidoctor.org/asciidoc/latest/lists/description/
+//      - 使用 @title 设置描述信息
 
 ### 表格
 
@@ -871,6 +895,32 @@ Column 3
 
 分隔符与内容可以紧挨者（`紧凑模式`），或者保持前后一个空白行（`稀疏模式`）。
 
+### 引用
+
+{{Quote|
+
+
+
+}}
+
+### 备注
+
+{{Comment|
+
+// TODO 列表？
+
+}}
+
+联动效果，鼠标移入时，高亮备注到达路径以及备注内容。
+
+### 参考
+
+{{Reference|
+
+// TODO 列表？https://docs.asciidoctor.org/asciidoc/latest/sections/bibliography/
+
+}}
+
 ### 块引入
 
 // TODO 链接跳转、块内容引入
@@ -898,24 +948,77 @@ Column 3
 
 - 加粗
 ```
-**粗体**
+*粗体*
 ```
 
 等价于
 
 ```
-`粗体`{@style.font.bold?}
+`粗体`{@font.bold?}
+```
+
+等价于
+
+```
+@fontBold
+@.font
+@..bold?
+
+`粗体`{@@fontBold}
+```
+
+- 斜体
+```
+_斜体_
+```
+
+等价于
+
+```
+`斜体`{@font.italic?}
+```
+
+等价于
+
+```
+@fontItalic
+@.font
+@..italic?
+
+`斜体`{@@fontItalic}
+```
+
+- 下标
+```
+H~2~O
+```
+
+等价于
+
+```
+H`2`{@font.downgrade?}O
+```
+
+- 上标
+```
+E=mc^2^
+```
+
+等价于
+
+```
+E=mc`2`{@font.upgrade?}
 ```
 
 - 指定样式属性
 ```
-**粗体**{@style.font.color red, @style.font.size 24px}
+*粗体*{@font.color red, @font.size 24px}
 ```
 
 等价于
 
 ```
-`粗体`{@style.font.bold?, @style.font.color red, @style.font.size 24px}
+`粗体`{@font.bold?, @font.color red, @font.size 24px}
 ```
 
 - 无样式
@@ -926,26 +1029,24 @@ Column 3
 - 引用样式
 ```
 @bigRedFont
-@.font
-@..color red
-@..size 24px
+@.color red
+@.size 24px
 
-**大红字体**{@style @@bigRedFont}
+*大红粗字体*{@font @@bigRedFont}
 ```
 
 以上也可以按如下方式定义样式：
 
 ```
-@bigRedFontStyle
-@.style
-@..font
-@...color red
-@...size 24px
+@bigRedFont
+@.font
+@..color red
+@..size 24px
 
-**大红字体**{@@bigRedFontStyle, @style.font.background.color yellow}
+*大红粗字体*{@@bigRedFont, @font.background.color yellow}
 ```
 
-即，`@style.font.background.color`将与`@bigRedFontStyle.style`做合并。
+即，`@font.background.color`将与`@bigRedFont.font`做合并。
 
 ## 常用属性
 
