@@ -199,7 +199,7 @@ Long number = 10L;
 也即声明其值为标记语言，需要按标记语法进行解析：
 ```
 @title
-**三天**速成？不存在的！
+*三天*速成？不存在的！
 
     -- 评[《Xxx》](https://three-days-done.example.com)
 @$
@@ -422,7 +422,7 @@ Long number = 10L;
 文本为**段落**的组成单元，其除了文字以外，
 仅具备与布局相关的[样式属性](#内联块)：
 ```
-这段文字有**加粗**`红`{@font.color red}字。
+这段文字有*加粗*`红`{@font.color red}字。
 ```
 
 以上示例的数据结构为：
@@ -444,7 +444,7 @@ Long number = 10L;
         }
       }
     }
-    , enclosure: "**"
+    , enclosure: "*"
     , content: "加粗"
   }
   , {
@@ -837,8 +837,11 @@ Little Cat
 列表项的属性作用于自身及其子列表。
 
 // TODO 代办列表: https://docs.asciidoctor.org/asciidoc/latest/lists/checklist/
+
 //      - 使用 [ ] 和 [x]
+
 // TODO 描述列表: https://docs.asciidoctor.org/asciidoc/latest/lists/description/
+
 //      - 使用 @title 设置描述信息
 
 ### 表格
