@@ -844,6 +844,10 @@ This is a English paragraph.
 也即，需要增加`@marker`属性，用于记录所使用的**分隔标记符**，
 主要用于双向解析`HDML`。
 
+### 块引用
+
+// TODO 对块内容的引用、对块位置的引用
+
 ### 代码块
 
 代码块采用如下形式书写：
@@ -906,6 +910,8 @@ Little Cat
 
 }}
 ```
+
+// TODO 图片块的本质为对目标链接内容的嵌入展示
 
 ### 列表
 
@@ -1015,7 +1021,7 @@ Column 3
 在分隔符下面可以声明列的相关属性，且列块中仍可嵌套任意层次的其他*非行/列*的块，
 也可嵌套新的表格。
 
-### 引用
+### 引述
 
 {{Quote|
 
@@ -1040,10 +1046,6 @@ Column 3
 // TODO 列表？https://docs.asciidoctor.org/asciidoc/latest/sections/bibliography/
 
 }}
-
-### 块引入
-
-// TODO 链接跳转、块内容引入
 
 ## 内联块
 
