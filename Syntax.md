@@ -1115,7 +1115,7 @@ H~2~O
 等价于
 
 ```
-H`2`{@font.downgrade?}O
+H`2`{@downgrade?}O
 ```
 
 - 上标
@@ -1126,7 +1126,7 @@ E=mc^2^
 等价于
 
 ```
-E=mc`2`{@font.upgrade?}
+E=mc`2`{@upgrade?}
 ```
 
 - 指定样式属性
