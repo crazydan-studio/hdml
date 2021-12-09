@@ -358,9 +358,11 @@ Long number = 10L;
 }}
 ```
 
-块内容可以为文本，可以为属性集合，也可以为其他块。
-实际可处理的内容由**块处理器**决定，
+块内容可以为文本，也可以为其他块。实际可处理的内容由**块处理器**决定，
 **文档解析器**只是将解析得到的数据结构交给**块处理**去处理。
+
+以上示例中的两个`@link`的块视为内容为空的`段落块`，
+且`@link`为该段落块的属性。
 
 以上示例的数据结构为：
 ```js
@@ -417,10 +419,10 @@ Long number = 10L;
 
 ### 文本
 
-文本是最小的块单元，不可再被细分。文本才是文档的「骨与肉」。
+文本是最小的块单元，不可再被细分。文本才是文档的「血肉」。
 
-文本为**段落**的组成单元，其除了文字以外，
-仅具备与布局相关的[样式属性](#内联块)：
+文本是**段落**的组成单元，其除了文字以外，
+其仅具备与布局相关的[样式属性](#内联块)：
 ```
 这段文字有*加粗*`红`{@font.color red}字。
 ```
@@ -573,13 +575,17 @@ Long number = 10L;
 相对多出来的数量就是该章节所处的相对层级级数，
 且相邻的层级级数无需连续，但渲染时不会自动弥补该断层。
 
+**注**：**章节**是具有层级关系的块。
+
 以上示例的数据结构为：
 ```js
 [
   {
     name: "Section"
     , attr: {
-      title: { value: "第 1 节" }
+      level: { value: 1 }
+      , marker: { value: "===" }
+      , title: { value: "第 1 节" }
     }
     , blocks: [
       {
@@ -596,7 +602,9 @@ Long number = 10L;
       , {
         name: "Section"
         , attr: {
-          title: { value: "第 1.1 节" }
+          level: { value: 2 }
+          , marker: { value: "====" }
+          , title: { value: "第 1.1 节" }
         }
         , blocks: [
           {
@@ -613,7 +621,9 @@ Long number = 10L;
           , {
             name: "Section"
             , attr: {
-              title: { value: "第 1.1.1 节" }
+              level: { value: 3 }
+              , marker: { value: "=====" }
+              , title: { value: "第 1.1.1 节" }
             }
             , blocks: [
               {
@@ -636,7 +646,9 @@ Long number = 10L;
   , {
     name: "Section"
     , attr: {
-      title: { value: "第 2 节" }
+      level: { value: 1 }
+      , marker: { value: "===" }
+      , title: { value: "第 2 节" }
     }
     , blocks: [
       {
@@ -657,24 +669,28 @@ Long number = 10L;
 
 ### 块嵌套
 
-在块中可以任意其他类型或相同类型的块，形成嵌套的块：
+在块中可以与其他类型或相同类型的块组合成为嵌套的块：
 ```
 {{Translation|
 @layout row
 
-===
+{{|
 @lang en
 @title English
 @author 张三
 
 This is a English paragraph.
 
-===
+}}
+
+{{|
 @lang zh
 @title 中文
 @author 李四
 
 这是一段英文。
+
+}}
 
 }}
 ```
@@ -688,7 +704,7 @@ This is a English paragraph.
   }
   , blocks: [
     {
-      name: "Section"
+      name: "Block"
       , attr: {
         lang: { value: "en" }
         , title: { value: "English" }
@@ -709,7 +725,7 @@ This is a English paragraph.
       ]
     }
     , {
-      name: "Section"
+      name: "Block"
       , attr: {
         lang: { value: "zh" }
         , title: { value: "中文" }
@@ -733,12 +749,107 @@ This is a English paragraph.
 }
 ```
 
+### 块分隔
+
+当某个**块内容**需要拆分成多个无层级关系的块时，
+也可以使用**块分隔符**来对内容进行分隔（在块内使用匿名块也有相同效果）。
+
+**块分隔符**需使用三个以上的短横线`-`为标记符，并独立成行。
+
+如此，前例中的`Translation`块便可以书写为如下形式：
+```
+{{Translation|
+@layout row
+
+----------------
+@lang en
+@title English
+@author 张三
+
+This is a English paragraph.
+
+----------------
+@lang zh
+@title 中文
+@author 李四
+
+这是一段英文。
+
+}}
+```
+
+**注**：为了保持视觉上的一致性，分隔出来的每个块都需要使用块分隔符，
+且标记符的长度应保持一致。
+
+块分隔符没有结束标记符，故而，分隔出的最后一个块的结束位置
+只能通过其所处的父块的边界决定，所以，必要时，需在匿名块内做块分隔。
+
+使用了块分隔符的块，其数据结构略有不同：
+```js
+{
+  name: "Translation"
+  , attr: {
+    layout: { value: "row" }
+  }
+  , blocks: [
+    {
+      name: "Block"
+      , attr: {
+        marker: { value: "----------------" }
+        , lang: { value: "en" }
+        , title: { value: "English" }
+        , author: { value: "张三" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "This is a English paragraph."
+            }
+          ]
+        }
+      ]
+    }
+    , {
+      name: "Block"
+      , attr: {
+        marker: { value: "----------------" }
+        , lang: { value: "zh" }
+        , title: { value: "中文" }
+        , author: { value: "李四" }
+      }
+      , blocks: [
+        {
+          name: "Paragraph"
+          , attr: {  }
+          , blocks: [
+            {
+              name: "Text"
+              , attr: {  }
+              , content: "这是一段英文。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+也即，需要增加`@marker`属性，用于标明所使用的标记符，
+主要用于双向解析`HDML`。
+
 ### 代码块
 
 代码块采用如下形式书写：
 ```
 {{Source|
 @title This is a Java example
+// @lang 值为 diff 时，按照文本差异方式展示内容
 @lang java
 
 int a = 0;
@@ -849,54 +960,59 @@ Little Cat
 ```
 {{Table|
 
-****************
-@head?
+{{Head|
 
-..........
+--------------
 Head 1
 
-..........
+--------------
 Head 2
 
-..........
+--------------
 Head 3
 
+}}
 
-****************
-@row?
+
+{{Row|
 @align center
 
-..........
+--------------
 @align left
 
 Column 1
 
-..........
+--------------
 Column 2
 
-..........
+--------------
 Column 3
 
+}}
 
-****************
-@row?
 
-..........
+{{|
+
+--------------
 @span 2
 
 Column 1
 
-..........
+--------------
 Column 3
+
+}}
 
 }}
 ```
 
-即，使用`*`作为行分隔符，以`.`作为列分隔符，符号的数量任意，
-但为了保持视觉上的一致性，一般要求使用固定数量的分隔符，
-数量至少在三个以上，且行的分隔符数量需多于列的分隔符数量。
+在`Table`块内，使用`Head`和`Row`块表示表格的**表格头**和**表格行**，
+且表格行可以直接使用匿名块，任何第一层的匿名块均默认视为行，
+除非该块标注了其具有非表格行职能的属性。
 
-分隔符与内容可以紧挨者（`紧凑模式`），或者保持前后一个空白行（`稀疏模式`）。
+在行内（包括表头）均使用[块分隔符](#块分隔)分隔列，且分隔标记符长度保持一致。
+在分隔符下面可以声明列的相关属性，且列块中仍可嵌套任意层次的其他非行列的块，
+但可嵌套新的表格。
 
 ### 引用
 
