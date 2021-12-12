@@ -445,8 +445,8 @@ Long number = 10L;
           , bold: { value: true }
         }
       }
+      , enclosure: { value: "*" }
     }
-    , enclosure: "*"
     , content: "加粗"
   }
   , {
@@ -470,7 +470,7 @@ Long number = 10L;
 ]
 ```
 
-**注**：`enclosure`表示文字块被什么符号包围（默认为反引号），
+**注**：属性`@enclosure`表示文字块被什么符号包围（默认为反引号），
 用于反向生成`HDML`。
 
 ### 段落
