@@ -62,11 +62,13 @@ Long number = 10L;
 {
   name: "Document"
   , attr: {
-    title: { value: "三天速成？不存在的！" }
+    title: { value: "三天速成？不存在的！", child: {} }
     , author: {
       value: None
-      , name: { value: "张三" }
-      , email: { value: "zhangsan@example.com" }
+      , child: {
+        name: { value: "张三", child: {} }
+        , email: { value: "zhangsan@example.com", child: {} }
+      }
     }
   }
   , blocks: [
@@ -84,7 +86,7 @@ Long number = 10L;
     , {
       name: "Section"
       , attr: {
-        title: { value: "第 1 节" }
+        title: { value: "第 1 节", child: {} }
       }
       , blocks: [
         {
@@ -103,7 +105,7 @@ Long number = 10L;
     , {
       name: "Section"
       , attr: {
-        title: { value: "第 2 节" }
+        title: { value: "第 2 节", child: {} }
       }
       , blocks: [
         {
@@ -131,7 +133,7 @@ Long number = 10L;
         , {
           name: "Source"
           , attr: {
-            lang: { value: "java" }
+            lang: { value: "java", child: {} }
           }
           , blocks: [
             {
@@ -156,6 +158,7 @@ Long number = 10L;
 **注**：
 - 这里仅引出结构，具体的解释将在[属性声明](#属性声明)和[块](#块)章节中说明；
 - 从数据结构上来看，除了`Text`块以外，其他类型的块均能够嵌套其他块；
+- 解析时，以单独的数据结构记录源文本与块的对应关系，且不需要完整记录输入内容，可根据块的结构去掉空格等无用字符；
 
 ## 属性声明
 
@@ -283,11 +286,13 @@ Long number = 10L;
 其数据结构将被解析为：
 ```js
 {
-  title: { value: "三天速成？不存在的！" }
+  title: { value: "三天速成？不存在的！", child: {} }
   , author: {
     value: None
-    , name: {  value: "张三" }
-    , email: { value: "zhangsan@example.com" }
+    , child: {
+      name: {  value: "张三", child: {} }
+      , email: { value: "zhangsan@example.com", child: {} }
+    }
   }
 }
 ```
@@ -305,8 +310,10 @@ Long number = 10L;
 {
   author: {
     value: "张三 <zhangsan@example.com>"
-    , name: { value: "张三" }
-    , email: { value: "zhangsan@example.com" }
+    , child: {
+      name: { value: "张三", child: {} }
+      , email: { value: "zhangsan@example.com", child: {} }
+    }
   }
 }
 ```
@@ -371,8 +378,10 @@ Long number = 10L;
   , attr: {
     title: {
       value: None
-      , numbered: { value: true }
-      , format: { value: "第N章" }
+      , child: {
+        numbered: { value: true, child: {} }
+        , format: { value: "第N章", child: {} }
+      }
     }
   }
   , blocks: [
@@ -381,7 +390,9 @@ Long number = 10L;
       , attr: {
         link: {
           value: "./a.hdoc"
-          , title: { value: "缘由" }
+          , child: {
+            title: { value: "缘由", child: {} }
+          }
         }
       }
       , blocks: [  ]
@@ -391,7 +402,9 @@ Long number = 10L;
       , attr: {
         link: {
           value: "./b.hdoc"
-          , title: { value: "发展" }
+          , child: {
+            title: { value: "发展", child: {} }
+          }
         }
       }
       , blocks: [  ]
@@ -442,12 +455,16 @@ Long number = 10L;
     , attr: {
       style: {
         value: None
-        , font: {
-          value: None
-          , bold: { value: true }
+        , child: {
+          font: {
+            value: None
+            , child: {
+              bold: { value: true, child: {} }
+            }
+          }
         }
       }
-      , enclosure: { value: "*" }
+      , enclosure: { value: "*", child: {} }
     }
     , content: "加粗"
   }
@@ -456,9 +473,13 @@ Long number = 10L;
     , attr: {
       style: {
         value: None
-        , font: {
-          value: None
-          , color: { value: "red" }
+        , child: {
+          font: {
+            value: None
+            , child: {
+              color: { value: "red", child: {} }
+            }
+          }
         }
       }
     }
@@ -517,7 +538,7 @@ Long number = 10L;
 {
   name: "Paragraph"
   , attr: {
-    indent: { value: 4 }
+    indent: { value: 4, child: {} }
   }
   , blocks: [
     {
@@ -585,9 +606,9 @@ Long number = 10L;
   {
     name: "Section"
     , attr: {
-      level: { value: 1 }
-      , marker: { value: "===" }
-      , title: { value: "第 1 节" }
+      level: { value: 1, child: {} }
+      , marker: { value: "===", child: {} }
+      , title: { value: "第 1 节", child: {} }
     }
     , blocks: [
       {
@@ -604,9 +625,9 @@ Long number = 10L;
       , {
         name: "Section"
         , attr: {
-          level: { value: 2 }
-          , marker: { value: "====" }
-          , title: { value: "第 1.1 节" }
+          level: { value: 2, child: {} }
+          , marker: { value: "====", child: {} }
+          , title: { value: "第 1.1 节", child: {} }
         }
         , blocks: [
           {
@@ -623,9 +644,9 @@ Long number = 10L;
           , {
             name: "Section"
             , attr: {
-              level: { value: 3 }
-              , marker: { value: "=====" }
-              , title: { value: "第 1.1.1 节" }
+              level: { value: 3, child: {} }
+              , marker: { value: "=====", child: {} }
+              , title: { value: "第 1.1.1 节", child: {} }
             }
             , blocks: [
               {
@@ -648,9 +669,9 @@ Long number = 10L;
   , {
     name: "Section"
     , attr: {
-      level: { value: 1 }
-      , marker: { value: "===" }
-      , title: { value: "第 2 节" }
+      level: { value: 1, child: {} }
+      , marker: { value: "===", child: {} }
+      , title: { value: "第 2 节", child: {} }
     }
     , blocks: [
       {
@@ -702,15 +723,15 @@ This is a English paragraph.
 {
   name: "Translation"
   , attr: {
-    layout: { value: "row" }
+    layout: { value: "row", child: {} }
   }
   , blocks: [
     {
       name: "Block"
       , attr: {
-        lang: { value: "en" }
-        , title: { value: "English" }
-        , author: { value: "张三" }
+        lang: { value: "en", child: {} }
+        , title: { value: "English", child: {} }
+        , author: { value: "张三", child: {} }
       }
       , blocks: [
         {
@@ -729,9 +750,9 @@ This is a English paragraph.
     , {
       name: "Block"
       , attr: {
-        lang: { value: "zh" }
-        , title: { value: "中文" }
-        , author: { value: "李四" }
+        lang: { value: "zh", child: {} }
+        , title: { value: "中文", child: {} }
+        , author: { value: "李四", child: {} }
       }
       , blocks: [
         {
@@ -792,16 +813,16 @@ This is a English paragraph.
 {
   name: "Translation"
   , attr: {
-    layout: { value: "row" }
+    layout: { value: "row", child: {} }
   }
   , blocks: [
     {
       name: "Block"
       , attr: {
-        marker: { value: "----------------" }
-        , lang: { value: "en" }
-        , title: { value: "English" }
-        , author: { value: "张三" }
+        marker: { value: "----------------", child: {} }
+        , lang: { value: "en", child: {} }
+        , title: { value: "English", child: {} }
+        , author: { value: "张三", child: {} }
       }
       , blocks: [
         {
@@ -820,10 +841,10 @@ This is a English paragraph.
     , {
       name: "Block"
       , attr: {
-        marker: { value: "----------------" }
-        , lang: { value: "zh" }
-        , title: { value: "中文" }
-        , author: { value: "李四" }
+        marker: { value: "----------------", child: {} }
+        , lang: { value: "zh", child: {} }
+        , title: { value: "中文", child: {} }
+        , author: { value: "李四", child: {} }
       }
       , blocks: [
         {
@@ -869,8 +890,8 @@ int a = 0;
 {
   name: "Source"
   , attr: {
-    lang: { value: "java" }
-    , title: { value: "This is a Java example" }
+    lang: { value: "java", child: {} }
+    , title: { value: "This is a Java example", child: {} }
   }
   , blocks: [
     {
@@ -1188,6 +1209,12 @@ E=mc`2`{@upgrade?}
 ```
 @import a/b/c.hdoc
 ```
+
+## 编辑器设计
+
+- 以块为单元进行展示和编辑，鼠标在块内时，浮动高亮突出块（嵌套块，多层浮动），并显示相关的可操作按钮（可移动块）
+- 块属性置灰显示
+- 块类型在鼠标移入块时，浮动显示，并可直接修改块类型
 
 ## 参考
 
